@@ -13,7 +13,7 @@ namespace Buggie_Backend.Controllers
     {
         private static readonly string[] Summaries = new[]
         {
-            "DICK", "DICK", "DICK", "DICK", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+            "Hot", "Sweltering", "Scorching"
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
