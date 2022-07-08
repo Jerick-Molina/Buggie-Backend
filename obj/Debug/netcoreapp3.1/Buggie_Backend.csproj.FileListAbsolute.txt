@@ -17,3 +17,17 @@ C:\Users\Jerick\Projects\Buggie_Backend\obj\Debug\netcoreapp3.1\Buggie_Backend.R
 C:\Users\Jerick\Projects\Buggie_Backend\obj\Debug\netcoreapp3.1\Buggie_Backend.dll
 C:\Users\Jerick\Projects\Buggie_Backend\obj\Debug\netcoreapp3.1\Buggie_Backend.pdb
 C:\Users\Jerick\Projects\Buggie_Backend\obj\Debug\netcoreapp3.1\Buggie_Backend.genruntimeconfig.cache
+C:\Users\Jerick\Projects\Buggie_Backend\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
+C:\Users\Jerick\Projects\Buggie_Backend\bin\Debug\netcoreapp3.1\Google.Protobuf.dll
+C:\Users\Jerick\Projects\Buggie_Backend\bin\Debug\netcoreapp3.1\K4os.Compression.LZ4.dll
+C:\Users\Jerick\Projects\Buggie_Backend\bin\Debug\netcoreapp3.1\K4os.Compression.LZ4.Streams.dll
+C:\Users\Jerick\Projects\Buggie_Backend\bin\Debug\netcoreapp3.1\K4os.Hash.xxHash.dll
+C:\Users\Jerick\Projects\Buggie_Backend\bin\Debug\netcoreapp3.1\MySql.Data.dll
+C:\Users\Jerick\Projects\Buggie_Backend\bin\Debug\netcoreapp3.1\Ubiety.Dns.Core.dll
+C:\Users\Jerick\Projects\Buggie_Backend\bin\Debug\netcoreapp3.1\ZstdNet.dll
+C:\Users\Jerick\Projects\Buggie_Backend\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
+C:\Users\Jerick\Projects\Buggie_Backend\bin\Debug\netcoreapp3.1\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Jerick\Projects\Buggie_Backend\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
+C:\Users\Jerick\Projects\Buggie_Backend\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\Jerick\Projects\Buggie_Backend\obj\Debug\netcoreapp3.1\Buggie_Backend.csproj.CopyComplete
+C:\Users\Jerick\Projects\Buggie_Backend\bin\Debug\netcoreapp3.1\Dapper.dll

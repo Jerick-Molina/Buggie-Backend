@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buggie_Backend", "Buggie_Backend.csproj", "{2D8AF6E7-30AE-4AF8-8D2B-5903219B9C67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "buggieUnit", "..\BuggieUnit\buggieUnit.csproj", "{0191BE6E-4CF0-4246-A0B2-F66394BAF0A9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2D8AF6E7-30AE-4AF8-8D2B-5903219B9C67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D8AF6E7-30AE-4AF8-8D2B-5903219B9C67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D8AF6E7-30AE-4AF8-8D2B-5903219B9C67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D8AF6E7-30AE-4AF8-8D2B-5903219B9C67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0191BE6E-4CF0-4246-A0B2-F66394BAF0A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0191BE6E-4CF0-4246-A0B2-F66394BAF0A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0191BE6E-4CF0-4246-A0B2-F66394BAF0A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0191BE6E-4CF0-4246-A0B2-F66394BAF0A9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
