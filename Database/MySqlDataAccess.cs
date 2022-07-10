@@ -13,7 +13,7 @@ namespace Buggie.Database{
     //Instead of writing this everytime to connect you just instanciate it once
     public class MySqlDataAccess : IMySqlDataAccess
     {
-        string connectString = "server=192.168.3.139;userid=buggie;password=Mixon9090;database=TestDb";
+        string connectString = "server=192.168.3.139;userid=buggie;password=Mixon9090;database=BuggieDB";
         public   async Task<List<T>> LoadData<T, U>(string sql, string parameters)
         {
            
@@ -36,7 +36,7 @@ namespace Buggie.Database{
 
         public void SaveData<U>(string sql, U parameters)
         {
-            using (IDbConnection dbConnection = new MySqlConnection(sql))
+            using (IDbConnection dbConnection = new MySqlConnection(connectString))
             {
                 try
                 {

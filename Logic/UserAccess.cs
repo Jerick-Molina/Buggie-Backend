@@ -11,7 +11,7 @@ namespace  Buggie.Logic{
     {
         
         public readonly IMySqlDataAccess db;
-
+        
         public UserAccess(IMySqlDataAccess _db)
         {
             db = _db;
@@ -29,7 +29,23 @@ namespace  Buggie.Logic{
         
         }
 
+        public async Task<User> FindUser(User user)
+        {
+            var sql = $"select Email From Users where Email = '{user}'";
+            try
+            {   
+                var result = await db.LoadData<User,dynamic>(sql,"");
+                if(result.Count > 0)
+                {   
+                    return result[0];
+                }
+            }catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
+            return new User();
+        }
 
     }
 }

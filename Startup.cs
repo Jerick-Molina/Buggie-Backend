@@ -13,6 +13,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Buggie.Logic;
+
+using Buggie.DataProperties;
+
 namespace Buggie_Backend
 {
     public class Startup
@@ -24,27 +34,42 @@ namespace Buggie_Backend
 
         public IConfiguration Configuration { get; }
 
+        
+        string MyCORS = "_myCORS";
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {   
+          
             services.AddControllers();
             services.AddSingleton<IMySqlDataAccess,MySqlDataAccess>();
+            services.AddSingleton<IAccountAuthentication,AccountAuthentication>();
+            services.AddSingleton<IAccountAccess,AccountAccess>();
+            services.AddSingleton<IUserAccess,UserAccess>();
             
             
-            services.Configure<IdentityOptions>(options =>
-            {
-                //Settings: Password
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequiredLength = 8;
-                options.Password.RequiredUniqueChars = 1;
 
-                //Settings: User
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = false;
-               
-            });
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddCookie()
+            .AddJwtBearer(options => {
+             options.TokenValidationParameters = new TokenValidationParameters{
+            ValidateIssuer = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidateAudience = false,
+            ValidIssuer = "https://localhost:5501",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("j79n4hfrug5c9jk1u"))
+             };
+           });
+
+           services.AddCors(options => {
+                options.AddPolicy(name: MyCORS,policy =>{
+                policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyHeader();
+                });
+           });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,7 +79,7 @@ namespace Buggie_Backend
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
