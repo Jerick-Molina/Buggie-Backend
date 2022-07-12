@@ -16,6 +16,8 @@ namespace Buggie.Interface
 
         bool PasswordAuthentication(string password,string hashedPassword);
 
-        
+        User ReadJwtAccessToken(string token);
+
+        User ReadJwtInfoToken(string token);
     }
 }

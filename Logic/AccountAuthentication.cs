@@ -23,12 +23,16 @@ namespace Buggie.Logic {
         var tokenHanlder = new JwtSecurityTokenHandler();
         var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("j79n4hfrug5c9jk1u"));
         var credit =  new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
-
+            var claims = new[] 
+        {
+            new Claim("Role",user.Role),
+        };
         var token = new SecurityTokenDescriptor
         {
             Issuer = "",
             Expires = DateTime.UtcNow.AddHours(10),
-            SigningCredentials = credit
+            SigningCredentials = credit,
+            Subject = new ClaimsIdentity(claims)
         };
 
         var output = tokenHanlder.CreateEncodedJwt(token);
@@ -59,7 +63,15 @@ namespace Buggie.Logic {
         return output;
     }
 
-    public User ReadJwtToken(string token)
+    public User ReadJwtAccessToken(string token)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var JwtST = handler.ReadJwtToken(token);
+        User user = new User();
+        user.Role = JwtST.Claims.First(c => c.Type == "Role").Value;
+        return user;
+    }
+    public User ReadJwtInfoToken(string token)
     {
         var handler = new JwtSecurityTokenHandler();
         var JwtST = handler.ReadJwtToken(token);
