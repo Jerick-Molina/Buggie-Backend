@@ -34,6 +34,7 @@ namespace Buggie.Database{
             }
         }
 
+    
         public void SaveData<U>(string sql, U parameters)
         {
             using (IDbConnection dbConnection = new MySqlConnection(connectString))

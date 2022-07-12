@@ -35,7 +35,7 @@ namespace  Buggie.Logic{
             try
             {   
                 var result = await db.LoadData<User,dynamic>(sql,"");
-                if(result.Count > 0)
+                if(result.Count <= 1 && result.Count != 0)
                 {   
                     return result[0];
                 }

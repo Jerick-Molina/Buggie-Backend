@@ -5,7 +5,7 @@ namespace Buggie.DataProperties{
     public class Company {
 
         //Company-Id
-        public string Id {get;set;}
+        public string CompanyId {get;set;}
 
         //Name of Company
         public string Name {get;set;} 

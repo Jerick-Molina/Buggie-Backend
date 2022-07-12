@@ -10,9 +10,12 @@ namespace Buggie.Interface
 
         Task<string> GenerateJwtAccessToken(User user);
 
+        Task<string> GenerateJwtInfoToken(User user);
+
         string HashPassword(string password);
 
         bool PasswordAuthentication(string password,string hashedPassword);
+
         
     }
 }

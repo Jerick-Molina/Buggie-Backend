@@ -8,13 +8,15 @@ using Microsoft.Extensions.Logging;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using Buggie.Interface;
+using Microsoft.AspNetCore.Authorization;
+
 namespace Buggie.Controllers
 {
 
     [ApiController]
     [Route("[controller]")]
     [Produces("application/json")]
-    //[Authorize]
+    [Authorize]
     public class AccountController : ControllerBase{
 
         private IUserAccess userDb;
@@ -27,8 +29,8 @@ namespace Buggie.Controllers
         }
     
         [HttpGet("Create")] 
-        //[AllowAnonymous]
-        public async Task<IActionResult> CreateAccount(){
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateAccount(User user){
             User userMock = new User()
             {
                 
@@ -49,7 +51,7 @@ namespace Buggie.Controllers
         }    
 
         [HttpGet("SignIn")]
-
+        [AllowAnonymous]
         public async Task<IActionResult> SignIn()
         {
             
