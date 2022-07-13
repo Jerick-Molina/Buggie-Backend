@@ -25,7 +25,7 @@ namespace Buggie.DataProperties{
         public DateTime DateFinished {get;set;}
 
         //What company created the ticket
-        public string CompanyId {get;set;}
+        public int CompanyId {get;set;} 
 
         //Who created the ticket
         public string CreatedById {get;set;} 

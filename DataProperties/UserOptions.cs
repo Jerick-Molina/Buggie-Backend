@@ -10,7 +10,10 @@ namespace Buggie.DataProperties
         {
             AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+"
         };
-        public password Password {get;set;}
+        public password Password {get;set;} = new password()
+        {
+            
+        };
 
         public class password{
         

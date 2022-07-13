@@ -27,7 +27,12 @@ namespace  Buggie.Logic{
 
              db.SaveData<Ticket>(sql,ticket);
         }
-    
+
+      public async Task EditTicket(string userToken, Ticket ticket)
+      {
+
+        
+      }
       public async Task<List<Ticket>> SearchTicketsByCompany(Company company)
       {
 

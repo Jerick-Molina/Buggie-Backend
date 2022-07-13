@@ -20,7 +20,7 @@ namespace Buggie.Logic {
     
     public async Task<string> GenerateJwtAccessToken(User user)
     {
-        var tokenHanlder = new JwtSecurityTokenHandler();
+        var tokenHandler = new JwtSecurityTokenHandler();
         var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("j79n4hfrug5c9jk1u"));
         var credit =  new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
             var claims = new[] 
@@ -29,14 +29,15 @@ namespace Buggie.Logic {
         };
         var token = new SecurityTokenDescriptor
         {
-            Issuer = "",
+            Issuer = "https://localhost:5501",
             Expires = DateTime.UtcNow.AddHours(10),
             SigningCredentials = credit,
             Subject = new ClaimsIdentity(claims)
         };
 
-        var output = tokenHanlder.CreateEncodedJwt(token);
+        var output = tokenHandler.CreateEncodedJwt(token);
 
+        
         return output;
     }
 
@@ -48,11 +49,11 @@ namespace Buggie.Logic {
         var claims = new[] 
         {
             new Claim("UserId",user.UserId),
-            new Claim("CompanyId",user.CompanyId)
+            new Claim("CompanyId",user.CompanyId.ToString())
         };
         var token = new SecurityTokenDescriptor
         {
-            Issuer = "",
+            Issuer = "https://localhost:5501",
             Expires = DateTime.UtcNow.AddHours(10),
             Subject = new ClaimsIdentity(claims),
             SigningCredentials = credit,
@@ -77,7 +78,7 @@ namespace Buggie.Logic {
         var JwtST = handler.ReadJwtToken(token);
         User user = new User();
         user.UserId = JwtST.Claims.First(c => c.Type == "UserId").Value;
-        user.CompanyId = JwtST.Claims.First(c => c.Type == "CompanyId").Value;
+        user.CompanyId =int.Parse(JwtST.Claims.First(c => c.Type == "CompanyId").Value);
         return user;
     }
     public string HashPassword(string password)
@@ -103,7 +104,6 @@ namespace Buggie.Logic {
             return builder.ToString();
         }
     }
-
 
     public bool PasswordAuthentication(string password, string hashed)
     {

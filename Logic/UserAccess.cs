@@ -11,12 +11,18 @@ namespace  Buggie.Logic{
     {
         
         public readonly IMySqlDataAccess db;
+
         
         public UserAccess(IMySqlDataAccess _db)
         {
             db = _db;
+           
         }
 
+        public async Task AddCompanyId(User user)
+        {
+            
+        }
         //This will be used to get 
         public async Task<List<User>> GetUsers()
         {
@@ -31,7 +37,7 @@ namespace  Buggie.Logic{
 
         public async Task<User> FindUser(User user)
         {
-            var sql = $"select Email From Users where Email = '{user}'";
+            var sql = $"select * From Users where Email = '{user.Email}'";
             try
             {   
                 var result = await db.LoadData<User,dynamic>(sql,"");

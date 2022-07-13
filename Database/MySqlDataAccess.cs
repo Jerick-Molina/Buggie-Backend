@@ -27,7 +27,7 @@ namespace Buggie.Database{
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    return null;
+                    return new List<T>();
                 }
 
                
@@ -45,7 +45,7 @@ namespace Buggie.Database{
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine("Save Data: " + e.Message);
                 }
             }
         }

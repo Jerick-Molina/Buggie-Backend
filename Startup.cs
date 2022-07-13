@@ -43,19 +43,15 @@ namespace Buggie_Backend
             services.AddControllers();
             services.AddSingleton<IMySqlDataAccess,MySqlDataAccess>();
             services.AddSingleton<IAccountAuthentication,AccountAuthentication>();
+            services.AddSingleton<ICompanyAccess,CompanyAccess>();
             services.AddSingleton<IAccountAccess,AccountAccess>();
             services.AddSingleton<IUserAccess,UserAccess>();
-            
+      
             
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddCookie()
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options => {
-             options.TokenValidationParameters = new TokenValidationParameters{
+            options.TokenValidationParameters = new TokenValidationParameters{
             ValidateIssuer = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
@@ -64,7 +60,7 @@ namespace Buggie_Backend
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("j79n4hfrug5c9jk1u"))
              };
            });
-
+         
            services.AddCors(options => {
                 options.AddPolicy(name: MyCORS,policy =>{
                 policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyHeader();
@@ -83,7 +79,7 @@ namespace Buggie_Backend
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            //app.UseAuthentication();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

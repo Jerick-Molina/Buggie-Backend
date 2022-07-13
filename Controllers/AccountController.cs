@@ -21,47 +21,113 @@ namespace Buggie.Controllers
 
         private IUserAccess userDb;
         private IAccountAccess accDb;
+        private ICompanyAccess comDb;
 
-        public AccountController(IUserAccess  _userDb,IAccountAccess _accDb)
+        private IAccountAuthentication authen;
+        private string rMessage = "";
+        public AccountController(IUserAccess  _userDb,IAccountAccess _accDb, 
+        ICompanyAccess _comDb,IAccountAuthentication _authen)
         {
+            comDb = _comDb;
             userDb = _userDb;
             accDb = _accDb;
+            authen = _authen;
         }
     
-        [HttpGet("Create")] 
+        [HttpGet("Create/User")] 
         [AllowAnonymous]
-        public async Task<IActionResult> CreateAccount(User user){
-            User userMock = new User()
-            {
-                
-                FirstName = "Test",
-                LastName = "Subject",
-                Email = "TheMol90@gmail.com",
-                Password = "Test9012!!",
-                Role = "Admin"
-            };
-            var r = await accDb.AccountCreate(userMock);
-
-            var returnMessage = returnReview(r);
-            if(returnMessage != "")
-            {
-                return new BadRequestObjectResult(returnMessage);
+        public async Task<IActionResult> CreateAccount([FromHeader]string companyCode,User user){
+            
+            var companyExist = await comDb.FindCompany(companyCode);
+             if(companyExist.CompanyCode == string.Empty)
+             {
+                return new BadRequestObjectResult("Invalid Code");
+             }
+            var userExist = await userDb.FindUser(user);
+            if(userExist.Email == string.Empty)
+            {   
+                user.Role = "Developer";
+                user.CompanyId = companyExist.CompanyId;
+                  rMessage = await accDb.AccountCreate(user);
+                 
             }
-            return new OkObjectResult(r);
+            var r = returnReview(rMessage);
+            if(r != "")
+            {
+                return new BadRequestObjectResult(r);
+            }
+            return new OkObjectResult(rMessage);
         }    
+        
+
+        //Get the company name along with creating the user account
+        [HttpGet("Create/Company")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateCompany([FromHeader]string Name,[FromBody]User user)
+        {
+            Console.WriteLine("hi");
+            var userExist = await userDb.FindUser(user);
+            if(userExist.Email != string.Empty)
+            {
+             return new BadRequestObjectResult("User already exist");
+            }
+            if(Name != ""){
+             var code = await comDb.CreateCompany(Name,user);
+            if(code != "")
+            {
+             var comp = await comDb.FindCompany(code);
+
+            user.CompanyId = comp.CompanyId;
+            user.Role = "Admin";
+            rMessage = await accDb.AccountCreate(user);
+
+            }
+            }else
+            {
+                return new BadRequestObjectResult("Company name empty");
+            }
+            var r = returnReview(rMessage);
+            if(r != "")
+            {
+                return new BadRequestObjectResult(r);
+            }
+            return new OkObjectResult(rMessage);
+        }
 
         [HttpGet("SignIn")]
         [AllowAnonymous]
-        public async Task<IActionResult> SignIn()
+        public async Task<IActionResult> SignIn(User user)
         {
             
-
-
-            return new OkObjectResult("");
+            var result = await accDb.AccountSignIn(user);
+            
+            var rMessage = returnReview(result);
+            if(rMessage != "")
+            {
+               return new BadRequestObjectResult(rMessage);
+            }
+            return new OkObjectResult(result);
         }
 
 
+     
+        
 
+        
+        // [HttpGet("Info")]
+        // [Authorize]
+        // public async Task<IActionResult> Test([FromHeader]string Authorization)
+        // {   
+        //     string[] split = Authorization.Split(' ');
+
+        //     var user =   authen.ReadJwtAccessToken(split[1].ToString());
+
+        //     if(user.Role != "Poop")
+        //     {
+        //         return new UnauthorizedObjectResult(returnReview("Role"));
+        //     }
+        //     return new OkObjectResult("Authorized");
+        // }
 
         private string returnReview(string result)
         {
@@ -76,7 +142,10 @@ namespace Buggie.Controllers
                     return "Something happened in our end, please try again later";
                 case "Invalid":
                     return "Input is invalid";
+                case "Role":
+                    return "Low authentication role";
             }
+
 
             return "";
         }

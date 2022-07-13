@@ -17,7 +17,11 @@ namespace Buggie.DataProperties
         //Assigned Role(Can only be one role. Only Admin will be able to Update Role. Admin cannot edit Admin) : Admin, Associate, Developer
         public string Role {get;set;} = string.Empty;
 
-        public string CompanyId {get;set;} = string.Empty;
+        public int CompanyId {get;set;}
+
+    
+
+        
     }
 }
 

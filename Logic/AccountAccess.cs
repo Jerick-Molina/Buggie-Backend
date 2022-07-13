@@ -20,17 +20,16 @@ namespace  Buggie.Logic{
            userDb = _userDb;
         }
         public async Task<string> AccountCreate(User user){
-            string sql = "insert into Users(FirstName,LastName,Email,Password,Role) values (@FirstName,@LastName,@Email,@Password,@Role)";
+            string sql = "insert into Users(FirstName,LastName,Email,Password,Role,CompanyId) values (@FirstName,@LastName,@Email,@Password,@Role,@CompanyId)";
             try
             {
                 //Checks if user is empty
                 if(user.Email != string.Empty &&
-                   user.Password != string.Empty 
+                   user.Password != string.Empty &&
+                   user.FirstName != string.Empty &&
+                   user.LastName != string.Empty
                 )
                 {
-                var result = await userDb.FindUser(user);
-                if(result.Email == null)
-                 {
                     //Hashes password before going into the database
                     user.Password = acc.HashPassword(user.Password);
                     //Inserts Info into the Database
@@ -39,7 +38,7 @@ namespace  Buggie.Logic{
                     var token = await acc.GenerateJwtAccessToken(user);
                     //returns token
                     return token;
-                }
+                
                 }else
                 {   
                 
@@ -61,14 +60,14 @@ namespace  Buggie.Logic{
                     user.Password = acc.HashPassword(user.Password);
                     var result = await userDb.FindUser(user);
                     //Checks if user exist
-                    if(result.Email != null)
+                    if(result.Email != string.Empty)
                     {
-                        user.Password = acc.HashPassword(user.Password);
+                       
                         //Checks if passwords are identical
                         if(result.Password == user.Password)
                         {
                             
-                            var token = await acc.GenerateJwtAccessToken(user);
+                            var token = await acc.GenerateJwtAccessToken(result);
 
                             return token;
                         }
