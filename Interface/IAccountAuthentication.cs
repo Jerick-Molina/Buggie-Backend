@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Buggie.DataProperties;
 
@@ -8,7 +9,7 @@ namespace Buggie.Interface
     {
         
 
-        Task<string> GenerateJwtAccessToken(User user);
+        Task<string> GenerateJwtAccessToken(string InfoToken);
 
         Task<string> GenerateJwtInfoToken(User user);
 
@@ -19,5 +20,9 @@ namespace Buggie.Interface
         User ReadJwtAccessToken(string token);
 
         User ReadJwtInfoToken(string token);
+
+        bool IsUserRoleValid(User user,string[] roles);
+
+        User ReadTokens(ClaimsIdentity identity);
     }
 }

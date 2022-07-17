@@ -13,7 +13,7 @@ namespace Buggie.Controllers
 {
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("API/[controller]")]
     [Authorize]
     public class TicketController : ControllerBase{
 

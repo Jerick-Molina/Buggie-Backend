@@ -46,7 +46,7 @@ namespace Buggie_Backend
             services.AddSingleton<ICompanyAccess,CompanyAccess>();
             services.AddSingleton<IAccountAccess,AccountAccess>();
             services.AddSingleton<IUserAccess,UserAccess>();
-      
+            services.AddSingleton<ITicketAccess,TicketAccess>();
             
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

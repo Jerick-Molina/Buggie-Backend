@@ -9,8 +9,10 @@ namespace Buggie.Interface{
     {
 
 
-      Task<string> AccountCreate(User user);
+      Task<string[]> AccountCreate(User user);
 
-       Task<string> AccountSignIn(User user);
+       Task<string[]> AccountSignIn(User user);
+
+       Task<User> FindAccount(User user);
     }
 }

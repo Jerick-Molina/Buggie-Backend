@@ -8,7 +8,7 @@ namespace  Buggie.Logic{
 
     
     
-    public class TicketAccess {
+    public class TicketAccess  : ITicketAccess{
         
         public readonly IMySqlDataAccess db;
 
@@ -22,7 +22,7 @@ namespace  Buggie.Logic{
         */
       public async Task CreateTicket(string userToken,Ticket ticket)
         {
-            
+            //MySQL: Creates tickets
             string sql = "select * from test";
 
              db.SaveData<Ticket>(sql,ticket);

@@ -53,5 +53,9 @@ namespace  Buggie.Logic{
             return new User();
         }
 
+        public async Task<List<Projects>> GetAllProjects()
+        {
+            return new List<Projects>(); 
+        }
     }
 }

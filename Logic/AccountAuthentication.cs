@@ -18,14 +18,14 @@ namespace Buggie.Logic {
     public class AccountAuthentication : IAccountAuthentication {
 
     
-    public async Task<string> GenerateJwtAccessToken(User user)
+    public async Task<string> GenerateJwtAccessToken(string infoToken)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("j79n4hfrug5c9jk1u"));
         var credit =  new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
             var claims = new[] 
         {
-            new Claim("Role",user.Role),
+            new Claim("Token",infoToken),
         };
         var token = new SecurityTokenDescriptor
         {
@@ -49,12 +49,12 @@ namespace Buggie.Logic {
         var claims = new[] 
         {
             new Claim("UserId",user.UserId),
-            new Claim("CompanyId",user.CompanyId.ToString())
+            new Claim("CompanyId",user.CompanyId.ToString()),
+            new Claim("Role",user.Role)
         };
         var token = new SecurityTokenDescriptor
         {
             Issuer = "https://localhost:5501",
-            Expires = DateTime.UtcNow.AddHours(10),
             Subject = new ClaimsIdentity(claims),
             SigningCredentials = credit,
         };
@@ -117,5 +117,36 @@ namespace Buggie.Logic {
         return false;
     }
 
+    public bool IsUserRoleValid(User user,string[] roles)
+    {
+        return false;
+    }
+
+    //Gets user from AccessToken token to reveal InfoToken
+    public User ReadTokens(ClaimsIdentity identity)
+    {
+        try
+        {
+         var infoToken = identity.Claims.First(c => c.Type == "InfoToken").Value;
+
+         var tokenHandler =  new JwtSecurityTokenHandler();
+
+         var readToken = tokenHandler.ReadJwtToken(infoToken);
+      
+         User user = new User()
+         {
+            Role = readToken.Claims.First(c => c.Type == "Role").Value,
+            UserId = readToken.Claims.First(c => c.Type == "UserId").Value,
+            CompanyId = int.Parse(readToken.Claims.First(c => c.Type == "CompanyId").Value)
+         };
+
+         return user;
+        }catch(Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
+        return null;
+    }
     }
 }

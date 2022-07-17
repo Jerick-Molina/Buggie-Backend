@@ -10,16 +10,16 @@ namespace  Buggie.Logic{
     public class AccountAccess : IAccountAccess {
         
         public readonly IMySqlDataAccess db;
-        public readonly IUserAccess userDb;
-        public IAccountAuthentication acc;
+        public readonly IUserAccess userAcss;
+        public IAccountAuthentication authen;
         
-        public AccountAccess (IMySqlDataAccess _db, IAccountAuthentication _acc, IUserAccess _userDb)
+        public AccountAccess (IMySqlDataAccess _db, IAccountAuthentication _authen, IUserAccess _userAcss)
         {
            db = _db;
-           acc = _acc;
-           userDb = _userDb;
+           authen = _authen;
+           userAcss = _userAcss;
         }
-        public async Task<string> AccountCreate(User user){
+       public async Task<string[]> AccountCreate(User user){
             string sql = "insert into Users(FirstName,LastName,Email,Password,Role,CompanyId) values (@FirstName,@LastName,@Email,@Password,@Role,@CompanyId)";
             try
             {
@@ -31,34 +31,36 @@ namespace  Buggie.Logic{
                 )
                 {
                     //Hashes password before going into the database
-                    user.Password = acc.HashPassword(user.Password);
+                    user.Password = authen.HashPassword(user.Password);
                     //Inserts Info into the Database
                     db.SaveData<User>(sql,user);
-                    //Gives user a access token
-                    var token = await acc.GenerateJwtAccessToken(user);
+                    //Gives user a access token and its 
+                    var accesstoken = await authen.GenerateJwtAccessToken(user);
+                    
+                    var userInfo = await userAcss.FindUser(user);
+
+                    var infoToken = await authen.GenerateJwtInfoToken(userInfo);
+                    //Going to return AccessToken and IdentityToken
+                    string[] tokens = {accesstoken,infoToken};
                     //returns token
-                    return token;
+                    return tokens;
                 
-                }else
-                {   
-                
-                    return "Empty";
                 }
+               
             }catch(Exception e)
             {
                 Console.WriteLine(e.Message);
-                Console.WriteLine(e.Message);
             }
-            return "Error";
+            return null;
         }
-         public async Task<string> AccountSignIn(User user){
+        public async Task<string[]> AccountSignIn(User user){
             try
             {
                 if(user.Email != string.Empty &&
                    user.Password != string.Empty)
                 {
-                    user.Password = acc.HashPassword(user.Password);
-                    var result = await userDb.FindUser(user);
+                    user.Password = authen.HashPassword(user.Password);
+                    var result = await FindAccount(user);
                     //Checks if user exist
                     if(result.Email != string.Empty)
                     {
@@ -67,20 +69,39 @@ namespace  Buggie.Logic{
                         if(result.Password == user.Password)
                         {
                             
-                            var token = await acc.GenerateJwtAccessToken(result);
+                            var accessToken = await authen.GenerateJwtAccessToken(result);
+                            var infoToken = await authen.GenerateJwtInfoToken(result);
 
-                            return token;
+                            string[] tokens = {accessToken,infoToken};
+                            return tokens;
                         }
                     }
-                    return "Invalid";
                 }
-                return "Empty";
             }catch(Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-            return "Error";
+            return null;
         }
         
+
+        public async Task<User> FindAccount(User user)
+        {
+            var sql = $"select * From Users where Email = '{user.Email}'";
+            try
+            {   
+                var result = await db.LoadData<User,dynamic>(sql,"");
+                if(result.Count <= 1 && result.Count != 0)
+                {   
+                    return result[0];
+                }
+            }catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return new User();
+        }
+
     }
 }

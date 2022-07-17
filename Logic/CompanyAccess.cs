@@ -17,7 +17,6 @@ namespace  Buggie.Logic{
         {
             db = _db;
         }
-
         // Account must be created before the company.
         public async Task<string> CreateCompany(string companyName,User user)
         {
@@ -35,7 +34,6 @@ namespace  Buggie.Logic{
             return string.Empty;
         }
         
-       
         public async Task<string> GenerateCompanyCode()
         {
             int codeLength = 8;
@@ -50,9 +48,6 @@ namespace  Buggie.Logic{
 
             return code;
         }
-
-
-
 
         public async Task<Company> FindCompany(string code)
         {

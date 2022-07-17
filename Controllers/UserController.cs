@@ -14,7 +14,7 @@ namespace Buggie.Controllers
 {
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("API/[controller]")]
     public class UserController : ControllerBase{
 
         public IMySqlDataAccess db;
