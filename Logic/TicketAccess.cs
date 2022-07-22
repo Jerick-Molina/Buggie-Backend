@@ -20,12 +20,22 @@ namespace  Buggie.Logic{
         /*Create Ticket
             Only Admin || Associate can create tickets
         */
-      public async Task CreateTicket(string userToken,Ticket ticket)
+      public async Task<bool> CreateTicket(Ticket ticket)
         {
             //MySQL: Creates tickets
-            string sql = "select * from test";
+            string sql = "insert into Tickets (Name,Description,Status,AssignedTo,DateStart,Priority,CompanyId,CreatedById,ProjectId) values (@Name,@Description,@Status,@AssignedTo,@DateStart,@Priority,@CompanyId,@CreatedById,@ProjectId) ";
 
-             db.SaveData<Ticket>(sql,ticket);
+             try
+             {
+                db.SaveData<Ticket>(sql,ticket);
+
+              return true;
+             }catch(Exception e)
+             {
+
+             }
+
+             return false;
         }
 
       public async Task EditTicket(string userToken, Ticket ticket)
@@ -33,13 +43,16 @@ namespace  Buggie.Logic{
 
         
       }
-      public async Task<List<Ticket>> SearchTicketsByCompany(Company company)
+      public async Task<List<Ticket>> SearchTicketsByCompany(int companyId)
       {
 
-            string sql = $"select * from Tickets where CompanyId =  '{company.CompanyId}'";
+            string sql = $"select * from Tickets where CompanyId = {companyId.ToString()}";
           try
           {
-                return await db.LoadData<Ticket,dynamic>(sql,"");
+
+            var results =  await db.LoadData<Ticket,string>(sql,"");
+              if(results.Count > 0)  return results;
+                
 
           }catch(Exception e)
           {
@@ -49,10 +62,10 @@ namespace  Buggie.Logic{
           return new List<Ticket>();
       }
 
-      public async Task<Ticket> SearchTicketById(Ticket ticket)
+      public async Task<Ticket> SearchTicketsByProject(int projectId,int companyId)
       {
 
-            string sql = $"select * from Tickets where TicketId = '{ticket.TicketId}'";
+            string sql = $"select * from Tickets where ProjectId,CompanyId = {projectId},{companyId}";
           try
           {
             var result = await db.LoadData<Ticket,dynamic>(sql,"");

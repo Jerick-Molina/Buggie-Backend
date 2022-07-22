@@ -73,12 +73,19 @@ namespace Buggie.Controllers
               user.CompanyId = comp.CompanyId;
               user.Role = "Admin";
               var tokens = await acc.AccountCreate(user);
-              if(tokens != null) return new BadRequestObjectResult(tokens);
+              var profile = new User()
+              {
+                Role = user.Role,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+              };
+              object[] results = {tokens,profile};
+              if(tokens != null) return new OkObjectResult(results);
              }
 
             }else return new BadRequestObjectResult("Company name empty");
             
-            return new OkObjectResult("");
+            return new BadRequestObjectResult("Error");
         }
 
         [HttpPost("SignIn")]
@@ -86,8 +93,9 @@ namespace Buggie.Controllers
         public async Task<IActionResult> SignIn(User user)
         {
             
-            var tokens = await acc.AccountSignIn(user);
-            if(tokens != null) return new BadRequestObjectResult(tokens);
+            var result = await acc.AccountSignIn(user);
+           
+            if(result != null) return new BadRequestObjectResult(result);
 
             return new OkObjectResult("Null");
         }

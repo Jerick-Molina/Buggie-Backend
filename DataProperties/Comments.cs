@@ -14,8 +14,8 @@ namespace Buggie.DataProperties{
         public string TicketId {get;set;}
 
         //Who created the comment
-        public string CreatorId {get;set;}
-
+        public string UserId {get;set;}
+ 
         //What the comment says
         public string Message {get;set;}
 

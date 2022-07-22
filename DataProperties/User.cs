@@ -4,7 +4,7 @@ namespace Buggie.DataProperties
 {
     public class User
     {
-        public string UserId {get;set;} = string.Empty;
+        public int UserId {get;set;} 
 
         public string FirstName {get;set;} = string.Empty;
 

@@ -48,15 +48,16 @@ namespace Buggie.Logic {
         var credit =  new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
         var claims = new[] 
         {
-            new Claim("UserId",user.UserId),
+            new Claim("UserId",user.UserId.ToString()),
             new Claim("CompanyId",user.CompanyId.ToString()),
             new Claim("Role",user.Role)
+           
         };
         var token = new SecurityTokenDescriptor
         {
             Issuer = "https://localhost:5501",
             Subject = new ClaimsIdentity(claims),
-            SigningCredentials = credit,
+            SigningCredentials = credit
         };
 
         var output = tokenHanlder.CreateEncodedJwt(token);
@@ -77,7 +78,7 @@ namespace Buggie.Logic {
         var handler = new JwtSecurityTokenHandler();
         var JwtST = handler.ReadJwtToken(token);
         User user = new User();
-        user.UserId = JwtST.Claims.First(c => c.Type == "UserId").Value;
+        user.UserId = int.Parse(JwtST.Claims.First(c => c.Type == "UserId").Value);
         user.CompanyId =int.Parse(JwtST.Claims.First(c => c.Type == "CompanyId").Value);
         return user;
     }
@@ -119,7 +120,13 @@ namespace Buggie.Logic {
 
     public bool IsUserRoleValid(User user,string[] roles)
     {
-        return false;
+       
+       foreach(var role in roles)
+       {
+            if(role == user.Role) return true;
+
+       }
+       return false;
     }
 
     //Gets user from AccessToken token to reveal InfoToken
@@ -127,7 +134,7 @@ namespace Buggie.Logic {
     {
         try
         {
-         var infoToken = identity.Claims.First(c => c.Type == "InfoToken").Value;
+         var infoToken = identity.Claims.First(c => c.Type == "Token").Value;
 
          var tokenHandler =  new JwtSecurityTokenHandler();
 
@@ -136,10 +143,11 @@ namespace Buggie.Logic {
          User user = new User()
          {
             Role = readToken.Claims.First(c => c.Type == "Role").Value,
-            UserId = readToken.Claims.First(c => c.Type == "UserId").Value,
+            UserId = int.Parse(readToken.Claims.First(c => c.Type == "UserId").Value),
             CompanyId = int.Parse(readToken.Claims.First(c => c.Type == "CompanyId").Value)
-         };
 
+         };
+       
          return user;
         }catch(Exception e)
         {

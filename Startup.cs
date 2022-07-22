@@ -46,6 +46,7 @@ namespace Buggie_Backend
             services.AddSingleton<ICompanyAccess,CompanyAccess>();
             services.AddSingleton<IAccountAccess,AccountAccess>();
             services.AddSingleton<IUserAccess,UserAccess>();
+            services.AddSingleton<IProjectAccess,ProjectAccess>();
             services.AddSingleton<ITicketAccess,TicketAccess>();
             
 
@@ -75,13 +76,14 @@ namespace Buggie_Backend
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+             app.UseCors(MyCORS);
             app.UseHttpsRedirection();
 
             app.UseRouting();
+          
             app.UseAuthentication();
             app.UseAuthorization();
-
+           
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
